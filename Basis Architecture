@@ -1,0 +1,144 @@
+BASIS FUNDAMENTALS
+
+Wednesday, March 12, 2025
+9:55 PM
+
+SAP ABAP Fundamentals
+	• SAP S/4HANA runs only on the SAP HANA database.
+SAP's Three-tiered Architecture
+
+Presentation Layer :  is where the user interface is located, SAP GUI, the SAP Business Client, and/or SAP Fiori. It is where users interact with the application and input or retrieve data. The user interface runs on a supported PC, laptop, tablet, or mobile device.
+Application Layer : is where the business logic and transaction processing of the application takes place. It handles requests from the presentation layer and communicates with the database layer to retrieve and store data. The application layer consists of one or more application servers or application instances.
+Database layer : is where the actual data is stored and managed. Each SAP system has its own separate database instance or tenant. In SAP S/4HANA, the database is SAP HANA.
+
+
+ABAP, short for Advanced Business Application Programming, is a proprietary programming language developed by SAP and used to develop SAP applications.
+
+Expanded application Layer Architecture:
+	• Every host can have multiple instances:
+	• Every instance has its own unique SID and Instance number(00, 01 etc..)
+	• The first application server installed is called Primary Application Server(PAS)
+	• Each SAP system also has Central services on a separate instance called ABAP central services instance(ASCS instance)
+
+
+
+
+Dispatcher:
+	• Manages the work process resources.
+	• Distributes the work process workload.
+	• Manages work process communication.
+	• Monitors the work processes.
+Dialog Work Process:
+	• Retrieves data from Database.
+	• Executes Business Logic.
+	• Manages user interface.
+	• Ensures timely execution.
+	• Responsive User Experience.
+
+Background/Batch Work Process:
+	• Background Tasks.
+	• Executes business logic.
+	• Manages User Interface.
+	• Ensures Timely Execution.
+	• Responsive user experience.
+
+
+
+
+The ABAP application server component buffer is a system component that stores and caches frequently accessed data to improve the performance and time. 
+
+
+
+
+Message Server:
+the ABAP platform provides central message services and lock management
+through a separate instance called ABAP Central Services, or ASCS. The ABAP message server acts as a central communication hub for the ABAP application servers
+in a distributed system landscape. It is configured only once per SAP
+system. Its primary function is to manage and distribute messages, notifications,
+and requests between all ABAP application servers, ensuring seamless communication and coordination between instances. The message server also handles load
+balancing and helps in distributing the workload efficiently among the application servers. It also provides a unified interface for monitoring and managing the message traffic, allowing administrators to track and analyze the communication flow
+within the system. 
+Enqueue Server: 
+The ABAP Enqueue Server provides lock management for the SAP system. The Enqueue Server manages logical locks at the application level using a lock table
+maintained in the memory of the central services instance. It ensures that only one user
+or program can access and modify a specific resource at a time, preventing conflicts
+and inconsistencies in the data. The Enqueue Server keeps track of all lock requests and grants or denies to resources based upon the current lock status. It also handles the release of locks once the resource is no longer needed, allowing other users
+or programs to access it. This function is crucial for maintaining data integrity and ensuring the smooth operation of the SAP system.
+
+
+
+The SAP application server supports browser-based communication requests by utilizing various technologies. These technologies include the Internet Communication Manager, or ICM, and the SAP Web Dispatcher.
+Internet Communication Manager(ICM):
+The ABAP Platform can process HTTP requests (and other protocols) directly from the internet or send HTTP client requests to the internet. To achieve this, the SAP Kernel provides the Internet Communication Manager (ICM) process and an Internet Communication Framework for implementing various communication protocols, including HTTP and HTTPS.
+The SAP ICM is an ABAP Platform component that provides the infrastructure for handling HTTP requests and responses in the ABAP Application Server. It is responsible for processing communication between clients and the application server, as well as performing tasks such as load balancing, SSL encryption, and caching.
+
+
+
+
+Here, when the dialog work process sends the complete message to the update work process, The update work process will take the VB log data and bundle it together and updates the application tables of the database and after updating it informs the dispatcher and dispatcher informs the message server and the message server informs enqueue server and then enqueue server removes the locks from the lock table.
+—-----------------------------------------------------------------------------------------------------------------
+1. Data Structure in SAP Systems
+	• SAP systems (e.g., SAP ECC, SAP S/4HANA) have client-specific and cross-client data.
+	• Client-specific data: Application data, user data, business settings (client-specific Customizing).
+	• Cross-client data: Repository objects (programs, table definitions), cross-client Customizing settings (e.g., holiday calendar).
+2. Client-Specific Data Handling
+	• Access is restricted to the active logon client.
+	• When accessing client-specific tables, SAP adds WHERE <client-field> = <login-client> in SQL queries.
+3. Cross-Client Data & Repository
+	• The Repository contains ABAP Workbench objects: dictionary objects, ABAP programs, menus, and screens.
+	• Changes to the Repository affect all clients in the system.
+4. Packages & Software Components
+	• Repository objects are grouped into packages (e.g., table KNA1 in package VSCORE under S4CORE).
+	• Packages belong to specific software components.
+5. Importance of Multi-System Landscape
+	• Development environment should be separate from production to avoid unintended impacts.
+	• Cross-client changes require multiple SAP systems.
+6. Customizing in SAP
+	• SAP provides SAP Best Practices for quick implementation.
+	• Customizing is done via SAP Reference IMG (Transaction SPRO).
+	• Customizing changes are recorded in Transport Requests for moving from development → test → production.
+7. Adjustments to Repository
+	• Customer Development: Creating custom repository objects in customer namespace (prefix Y/Z).
+	• Enhancements: Adding/modifying standard SAP objects via Enhancement Points, BAdIs, function group enhancements.
+	• Modifications: Directly changing SAP objects, requiring adjustment during upgrades.
+8. Clean Core Concept
+	• Minimizing modifications ensures smooth SAP upgrades and compliance with updates.
+	• Encourages extending functionality without modifying core SAP code.
+9. Tools for Data Structure Adjustments
+	• SAP Reference IMG (SPRO): Used for Customizing.
+	• ABAP Development Workbench (SE80, SE38, SE11): Traditional SAP development tools.
+	• ABAP Development Tools (ADT): Eclipse-based IDE for modern ABAP development.
+In SAP, Workbench Requests and Customizing Requests are two types of transport requests (TRs) used to manage changes across different SAP system landscapes.
+
+
+Feature	Workbench Request	Customizing Request
+Purpose	Development & technical changes	Configuration changes
+Scope	Cross-client	Client-specific
+Objects	ABAP programs, tables, dictionary objects, function modules	SPRO settings, company code settings, pricing, tax, etc.
+Affects	All clients in the system	Only the specific client
+Creation	SE80, SE11, SE38 (Workbench tools)	SPRO (SAP Customizing)
+
+
+Procedure for using the Maintenance Planner
+SAP recommends the following procedure for using the maintenance planner:
+Steps
+	Start by mapping your system landscape:
+Identify the systems in your landscape, including all the productive systems, development systems, and quality systems.
+	Prepare the maintenance plan:
+Determine the maintenance activities required for each system, such as upgrades, patches, support packs, or add-ons.
+	Create a new maintenance plan in the maintenance planner:
+Log in to the maintenance planner tool and create a new maintenance plan based on your system landscape and maintenance activities.
+	Add systems to the maintenance plan:
+In the maintenance planner, add the systems from your landscape to the maintenance plan. You can add both SAP and non-SAP systems.
+	Select maintenance activities:
+Specify the activities you want to perform for each system. This could include upgrading to a new release, applying support packs, or installing add-ons.
+	Check prerequisites and conflicts:
+The maintenance planner automatically checks for prerequisites and conflicts between the selected maintenance activities. This helps to ensure a smooth installation and minimize any potential issues.
+	Generate stack XML:
+When you have finalized the maintenance plan and activities, generate the stack XML file. This file contains all the necessary information for your selected maintenance activities.
+	Download necessary software components:
+Download the required software components and files for the maintenance activities. These files will be used during the actual installation or upgrade process.
+	Perform the installation or upgrade:
+Follow the instructions provided by SAP for each maintenance activity to perform the installation or upgrade process.
+	Validate the maintenance activity:
+After completing the installation or upgrade, validate the maintenance activity to ensure it has been completed and there are no issues.
